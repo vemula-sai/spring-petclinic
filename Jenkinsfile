@@ -7,14 +7,6 @@ pipeline {
                     branch: 'main'
             }
         }
-        stage ('SONAR') {
-            agent { label 'SONAR' }
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                sh 'mvn clean package sonar:sonar'
-              }
-            }
-        }
         stage ('Artifactory configuration') {
             steps {
                 rtServer (
