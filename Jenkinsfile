@@ -8,6 +8,7 @@ pipeline {
             }
         }
         stage ('SONAR') {
+            agent { label 'SONAR' }
             steps {
                 withSonarQubeEnv('sonarqube') {
                 sh 'mvn clean package sonar:sonar'
