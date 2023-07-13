@@ -8,8 +8,10 @@ pipeline {
             }
         }
         stage ('sonar') {
-            withSonarQubeEnv('sonarqube') {
-            sh 'mvn clean package sonar:sonar'
+            steps {
+                withSonarQubeEnv('sonar') {
+                sh 'mvn clean package sonar:sonar'
+              }
             }
         }
     }
