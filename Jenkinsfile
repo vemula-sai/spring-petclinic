@@ -7,17 +7,24 @@ pipeline {
                     branch: 'main'
             }
         }
+        stage ('SONAR') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+        }
         stage ('Artifactory configuration') {
             steps {
                 rtServer (
-                    id: "jfrog-jul11",
+                    id: "JFROG_CONFIG",
                     url: "https://latestqt.jfrog.io/",
-                    credentialsId: "jfrog-jul11"
+                    credentialsId: "JFROG_TOKEN"
                 )
 
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
-                    serverId: "jfrog-jul11",
+                    serverId: "JFROG_CONFIG",
                     releaseRepo: "qt-libs-release-local",
                     snapshotRepo: "qt-libs-snapshot-local"
                 )
@@ -38,7 +45,7 @@ pipeline {
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
-                    serverId: "jfrog-jul11"
+                    serverId: "JFROG_CONFIG"
                 )
             }
         }
